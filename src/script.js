@@ -1,6 +1,6 @@
 import { Point, HollowObject } from "./config/shape.js";
 import { vertCode3D, fragCode3D, generateShaderProgram } from "./config/shader-generator.js";
-import { projectionType, shadingType, shapeType, defaultColor } from "./config/constant.js";
+import { projectionType, shadingType, shapeType, defaultState } from "./config/constant.js";
 import { configureEventListener } from "./config/event-listener.js";
 
 let state;
@@ -17,33 +17,33 @@ function checkBrowserCompatibility(gl) {
 
 function resetState() {
     state = {
-        shape: shapeType.CUBE,
-        projection: projectionType.ORTHOGRAPHIC,
-        color: defaultColor,
+        shape: defaultState.shape,
+        projection: defaultState.projection,
+        color: defaultState.color,
     
-        shading: shadingType.LIGHT,
-        animation: false,
+        shading: defaultState.shading,
+        animation: defaultState.animation,
     
         transformation: {
             translation: {
-                x: 0,
-                y: 0,
-                z: 0,
+                x: defaultState.transformation.translation.x,
+                y: defaultState.transformation.translation.y,
+                z: defaultState.transformation.translation.z,
             },
             rotation: {
-                x: 0,
-                y: 0,
-                z: 0,
+                x: defaultState.transformation.rotation.x,
+                y: defaultState.transformation.rotation.y,
+                z: defaultState.transformation.rotation.z,
             },
             scalation: {
-                x: 1,
-                y: 1,
-                z: 1,
+                x: defaultState.transformation.scalation.x,
+                y: defaultState.transformation.scalation.y,
+                z: defaultState.transformation.scalation.z,
             },
         },
         camera: {
-            radius: 0,
-            rotation: 0,
+            radius: defaultState.camera.radius,
+            rotation: defaultState.camera.rotation,
         },
     };
 }

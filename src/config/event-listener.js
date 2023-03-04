@@ -1,4 +1,4 @@
-import { shadingType, projectionType, shapeType, defaultColor } from "./constant.js";
+import { shadingType, projectionType, shapeType, defaultState } from "./constant.js";
 
 function colorEventListener(state) {
     document.getElementById("color-picker").addEventListener("change", (event) => {
@@ -97,29 +97,29 @@ function utilityEventListener(state) {
     });
 }
 
-function fileEventListener(state, resetState) {
+function resetEventListener(state) {
     function setDefaultState() {
-        state.shape = shapeType.CUBE;
-        state.projection = projectionType.ORTHOGRAPHIC;
-        state.color = defaultColor;
+        state.shape = defaultState.shape;
+        state.projection = defaultState.projection;
+        state.color = defaultState.color;
 
-        state.shading = shadingType.LIGHT;
-        state.animation = false;
+        state.shading = defaultState.shading;
+        state.animation = defaultState.animation;
 
-        state.transformation.translation.x = 0;
-        state.transformation.translation.y = 0;
-        state.transformation.translation.z = 0;
+        state.transformation.translation.x = defaultState.transformation.translation.x;
+        state.transformation.translation.y = defaultState.transformation.translation.y;
+        state.transformation.translation.z = defaultState.transformation.translation.z;
 
-        state.transformation.rotation.x = 0;
-        state.transformation.rotation.y = 0;
-        state.transformation.rotation.z = 0;
+        state.transformation.rotation.x = defaultState.transformation.rotation.x;
+        state.transformation.rotation.y = defaultState.transformation.rotation.y;
+        state.transformation.rotation.z = defaultState.transformation.rotation.z;
 
-        state.transformation.scalation.x = 1;
-        state.transformation.scalation.y = 1;
-        state.transformation.scalation.z = 1;
+        state.transformation.scalation.x = defaultState.transformation.scalation.x;
+        state.transformation.scalation.y = defaultState.transformation.scalation.y;
+        state.transformation.scalation.z = defaultState.transformation.scalation.z;
 
-        state.camera.radius = 0;
-        state.camera.rotation = 0;
+        state.camera.radius = defaultState.camera.radius;
+        state.camera.rotation = defaultState.camera.rotation;
     }
 
     function setDefaultUI() {
@@ -171,7 +171,9 @@ function fileEventListener(state, resetState) {
         setDefaultState();
         setDefaultUI();
     });
+}
 
+function fileEventListener(state) {
     document.getElementById("save-data").addEventListener("click", (event) => {
         console.log(event.target.value);
     });
@@ -181,7 +183,7 @@ function fileEventListener(state, resetState) {
     });
 }
 
-function configureEventListener(state, resetState) {
+function configureEventListener(state) {
     colorEventListener(state);
     shapeEventListener(state);
     projectionEventListener(state);
@@ -193,7 +195,8 @@ function configureEventListener(state, resetState) {
     utilityEventListener(state);
     cameraEventListener(state);
 
-    fileEventListener(state, resetState);
+    resetEventListener(state);
+    fileEventListener(state);
 }
 
 export { configureEventListener };

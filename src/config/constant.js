@@ -15,6 +15,35 @@ const shadingType = {
     FLAT: 'FLAT',
 };
 
-const defaultColor = "#000000";
+const defaultState = {
+    shape: shapeType.CUBE,
+    projection: projectionType.ORTHOGRAPHIC,
+    color: "#000000",
 
-export { projectionType, shadingType, shapeType, defaultColor };
+    shading: shadingType.LIGHT,
+    animation: true,
+
+    transformation: {
+        translation: {
+            x: 0,
+            y: 0,
+            z: 0,
+        },
+        rotation: {
+            x: 0,
+            y: 0,
+            z: 0,
+        },
+        scalation: {
+            x: 1,
+            y: 1,
+            z: 1,
+        },
+    },
+    camera: {
+        radius: 0,
+        rotation: 0,
+    },
+};
+
+export { projectionType, shadingType, shapeType, defaultState };
