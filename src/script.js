@@ -1,9 +1,9 @@
 import { Point, HollowObject } from "./config/shape.js";
-import { vertCode3D, fragCode3D, generateShaderProgram } from "./config/shader-generator.js";
+import { vertCode3D, fragCode3D, generateShaderProgram } from "./util/shader-generator.js";
 import { projectionType, shadingType, shapeType, defaultState } from "./config/constant.js";
-import { configureEventListener } from "./config/event-listener.js";
+import { configureEventListener } from "./util/event-listener.js";
 
-let state;
+let state, glState;
 let lightProgram, flatProgram;
 let vertexBuffer, indexBuffer;
 
@@ -15,7 +15,7 @@ function checkBrowserCompatibility(gl) {
     return true;
 }
 
-function resetState() {
+function generateState() {
     state = {
         shape: defaultState.shape,
         projection: defaultState.projection,
@@ -46,6 +46,11 @@ function resetState() {
             rotation: defaultState.camera.rotation,
         },
     };
+
+    glState = {
+        vertices: new Float32Array([]),
+        indices: new Uint16Array([]),
+    };
 }
 
 function render() {
@@ -54,7 +59,7 @@ function render() {
 }
 
 function main() {
-    resetState();
+    generateState();
     configureEventListener(state);
 
     const canvas = document.getElementById("my-canvas");
