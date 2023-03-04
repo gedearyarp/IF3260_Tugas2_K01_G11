@@ -1,9 +1,77 @@
 import { shadingType, projectionType, shapeType, defaultState } from "./constant.js";
 
+function setDefaultState(state) {
+    state.shape = defaultState.shape;
+    state.projection = defaultState.projection;
+    state.color = defaultState.color;
+
+    state.shading = defaultState.shading;
+    state.animation = defaultState.animation;
+
+    state.transformation.translation.x = defaultState.transformation.translation.x;
+    state.transformation.translation.y = defaultState.transformation.translation.y;
+    state.transformation.translation.z = defaultState.transformation.translation.z;
+
+    state.transformation.rotation.x = defaultState.transformation.rotation.x;
+    state.transformation.rotation.y = defaultState.transformation.rotation.y;
+    state.transformation.rotation.z = defaultState.transformation.rotation.z;
+
+    state.transformation.scalation.x = defaultState.transformation.scalation.x;
+    state.transformation.scalation.y = defaultState.transformation.scalation.y;
+    state.transformation.scalation.z = defaultState.transformation.scalation.z;
+
+    state.camera.radius = defaultState.camera.radius;
+    state.camera.rotation = defaultState.camera.rotation;
+}
+
+function updateUI(state) {
+    document.getElementById("color-picker").value = state.color;
+
+    document.getElementById("cube").checked = state.shape === shapeType.CUBE;
+    document.getElementById("pyramid").checked = state.shape === shapeType.PYRAMID;
+    document.getElementById("octahedron").checked = state.shape === shapeType.OCTAHEDRON;
+
+    document.getElementById("orthographic").checked = state.projection === projectionType.ORTHOGRAPHIC;
+    document.getElementById("oblique").checked = state.projection === projectionType.OBLIQUE;
+    document.getElementById("perspective").checked = state.projection === projectionType.PERSPECTIVE;
+
+    document.getElementById("translation-x").value = state.transformation.translation.x;
+    document.getElementById("translation-y").value = state.transformation.translation.y;
+    document.getElementById("translation-z").value = state.transformation.translation.z;
+
+    document.getElementById("translation-x").nextElementSibling.value = state.transformation.translation.x;
+    document.getElementById("translation-y").nextElementSibling.value = state.transformation.translation.y;
+    document.getElementById("translation-z").nextElementSibling.value = state.transformation.translation.z;
+
+    document.getElementById("rotation-x").value = state.transformation.rotation.x;
+    document.getElementById("rotation-y").value = state.transformation.rotation.y;
+    document.getElementById("rotation-z").value = state.transformation.rotation.z;
+
+    document.getElementById("rotation-x").nextElementSibling.value = state.transformation.rotation.x;
+    document.getElementById("rotation-y").nextElementSibling.value = state.transformation.rotation.y;
+    document.getElementById("rotation-z").nextElementSibling.value = state.transformation.rotation.z;
+
+    document.getElementById("scalation-x").value = state.transformation.scalation.x;
+    document.getElementById("scalation-y").value = state.transformation.scalation.y;
+    document.getElementById("scalation-z").value = state.transformation.scalation.z;
+
+    document.getElementById("scalation-x").nextElementSibling.value = state.transformation.scalation.x;
+    document.getElementById("scalation-y").nextElementSibling.value = state.transformation.scalation.y;
+    document.getElementById("scalation-z").nextElementSibling.value = state.transformation.scalation.z;
+
+    document.getElementById("camera-radius").value = state.camera.radius;
+    document.getElementById("camera-rotation").value = state.camera.rotation;
+
+    document.getElementById("camera-radius").nextElementSibling.value = state.camera.radius;
+    document.getElementById("camera-rotation").nextElementSibling.value = state.camera.rotation;
+
+    document.getElementById("shading").checked = state.shading === shadingType.LIGHT;
+    document.getElementById("animation").checked = state.animation;
+}  
+
 function colorEventListener(state) {
     document.getElementById("color-picker").addEventListener("change", (event) => {
         state.color = event.target.value;
-        console.log(state.color);
     });
 }
 
@@ -98,78 +166,9 @@ function utilityEventListener(state) {
 }
 
 function resetEventListener(state) {
-    function setDefaultState() {
-        state.shape = defaultState.shape;
-        state.projection = defaultState.projection;
-        state.color = defaultState.color;
-
-        state.shading = defaultState.shading;
-        state.animation = defaultState.animation;
-
-        state.transformation.translation.x = defaultState.transformation.translation.x;
-        state.transformation.translation.y = defaultState.transformation.translation.y;
-        state.transformation.translation.z = defaultState.transformation.translation.z;
-
-        state.transformation.rotation.x = defaultState.transformation.rotation.x;
-        state.transformation.rotation.y = defaultState.transformation.rotation.y;
-        state.transformation.rotation.z = defaultState.transformation.rotation.z;
-
-        state.transformation.scalation.x = defaultState.transformation.scalation.x;
-        state.transformation.scalation.y = defaultState.transformation.scalation.y;
-        state.transformation.scalation.z = defaultState.transformation.scalation.z;
-
-        state.camera.radius = defaultState.camera.radius;
-        state.camera.rotation = defaultState.camera.rotation;
-    }
-
-    function setDefaultUI() {
-        document.getElementById("color-picker").value = state.color;
-
-        document.getElementById("cube").checked = state.shape === shapeType.CUBE;
-        document.getElementById("pyramid").checked = state.shape === shapeType.PYRAMID;
-        document.getElementById("octahedron").checked = state.shape === shapeType.OCTAHEDRON;
-
-        document.getElementById("orthographic").checked = state.projection === projectionType.ORTHOGRAPHIC;
-        document.getElementById("oblique").checked = state.projection === projectionType.OBLIQUE;
-        document.getElementById("perspective").checked = state.projection === projectionType.PERSPECTIVE;
-
-        document.getElementById("translation-x").value = state.transformation.translation.x;
-        document.getElementById("translation-y").value = state.transformation.translation.y;
-        document.getElementById("translation-z").value = state.transformation.translation.z;
-
-        document.getElementById("translation-x").nextElementSibling.value = state.transformation.translation.x;
-        document.getElementById("translation-y").nextElementSibling.value = state.transformation.translation.y;
-        document.getElementById("translation-z").nextElementSibling.value = state.transformation.translation.z;
-
-        document.getElementById("rotation-x").value = state.transformation.rotation.x;
-        document.getElementById("rotation-y").value = state.transformation.rotation.y;
-        document.getElementById("rotation-z").value = state.transformation.rotation.z;
-
-        document.getElementById("rotation-x").nextElementSibling.value = state.transformation.rotation.x;
-        document.getElementById("rotation-y").nextElementSibling.value = state.transformation.rotation.y;
-        document.getElementById("rotation-z").nextElementSibling.value = state.transformation.rotation.z;
-
-        document.getElementById("scalation-x").value = state.transformation.scalation.x;
-        document.getElementById("scalation-y").value = state.transformation.scalation.y;
-        document.getElementById("scalation-z").value = state.transformation.scalation.z;
-
-        document.getElementById("scalation-x").nextElementSibling.value = state.transformation.scalation.x;
-        document.getElementById("scalation-y").nextElementSibling.value = state.transformation.scalation.y;
-        document.getElementById("scalation-z").nextElementSibling.value = state.transformation.scalation.z;
-
-        document.getElementById("camera-radius").value = state.camera.radius;
-        document.getElementById("camera-rotation").value = state.camera.rotation;
-
-        document.getElementById("camera-radius").nextElementSibling.value = state.camera.radius;
-        document.getElementById("camera-rotation").nextElementSibling.value = state.camera.rotation;
-
-        document.getElementById("shading").checked = state.shading === shadingType.LIGHT;
-        document.getElementById("animation").checked = state.animation;
-    }
-
     document.getElementById("reset-default").addEventListener("click", (event) => {
-        setDefaultState();
-        setDefaultUI();
+        setDefaultState(state);
+        updateUI(state);
     });
 }
 
