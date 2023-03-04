@@ -2,13 +2,13 @@ const vertCode3D = `
     attribute vec3 vPosition;
     uniform float fudgeFactor;
 
-    uniform mat4 matTransform;
-    uniform mat4 matProjection;
+    uniform mat4 mTransform;
+    uniform mat4 mProjection;
     varying float color;
 
     void main(void) {
-        vec4 transformedPos = matTransform * vec4(vPosition.xy, vPosition.z * -1.0, 1.0);
-        vec4 projectedPos   = matProjection * transformedPos;
+        vec4 transformedPos = mTransform * vec4(vPosition.xy, vPosition.z * -1.0, 1.0);
+        vec4 projectedPos   = mProjection * transformedPos;
         if (fudgeFactor < 0.01) gl_Position = projectedPos;
         else {
             float zDivider = 2.0 + projectedPos.z * fudgeFactor;

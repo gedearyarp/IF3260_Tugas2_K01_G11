@@ -1,4 +1,4 @@
-import { shadingType, projectionType, shapeType, defaultState } from "../config/constant.js";
+import { shadingType, projectionType, shapeType, defaultState } from "./config/constant.js";
 
 function setDefaultState(state) {
     state.shape = defaultState.shape;
