@@ -12,27 +12,36 @@ export const mat4 = {
 
     translationMatrix: function (x, y, z) {
         return [
-            1, 0, 0, x,
-            0, 1, 0, y,
-            0, 0, 1, z,
-            0, 0, 0, 1
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            x, y, z, 1
         ];
     },
 
     rotationMatrix: function (x, y, z) {
-        const cosX = Math.cos(x);
-        const sinX = Math.sin(x);
-        const cosY = Math.cos(y);
-        const sinY = Math.sin(y);
-        const cosZ = Math.cos(z);
-        const sinZ = Math.sin(z);
-
-        return [
-            cosY * cosZ, cosX * sinZ + sinX * sinY * cosZ, sinX * sinZ - cosX * sinY * cosZ, 0,
-            -cosY * sinZ, cosX * cosZ - sinX * sinY * sinZ, sinX * cosZ + cosX * sinY * sinZ, 0,
-            sinY, -sinX * cosY, cosX * cosY, 0,
+        const rotationX = [
+            1, 0, 0, 0,
+            0, Math.cos(x), Math.sin(x), 0,
+            0, -Math.sin(x), Math.cos(x), 0,
             0, 0, 0, 1
         ];
+
+        const rotationY = [
+            Math.cos(y), 0, -Math.sin(y), 0,
+            0, 1, 0, 0,
+            Math.sin(y), 0, Math.cos(y), 0,
+            0, 0, 0, 1
+        ];
+
+        const rotationZ = [
+            Math.cos(z), Math.sin(z), 0, 0,
+            -Math.sin(z), Math.cos(z), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        return this.mult(this.mult(rotationX, rotationY), rotationZ);
     },
 
     projectionMatrix: function (type) {
@@ -48,14 +57,14 @@ export const mat4 = {
                 return [
                     1, 0, 0, 0,
                     0, 1, 0, 0,
-                    0.5, 0.5, 1, 0,
+                    Math.cos(64/180*Math.PI)/2, Math.cos(64/180*Math.PI)/2, 1, 0,
                     0, 0, 0, 1
                 ];
             case projectionType.PERSPECTIVE:
                 return [
                     1, 0, 0, 0,
                     0, 1, 0, 0,
-                    0, 0, 1, -1,
+                    0, 0, 1, 0,
                     0, 0, 0, 1
                 ];
         }
@@ -78,61 +87,55 @@ export const mat4 = {
 
     inverse: function (a) {
         let result = [];
+        let temp = [];
 
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-                result[i * 4 + j] = this.cofactor(a, i, j);
+                result[i * 4 + j] = a[i * 4 + j];
+                temp[i * 4 + j] = 0;
             }
+            temp[i * 4 + i] = 1;
         }
-
-        result = this.transpose(result);
-
-        const det = this.determinant(a);
-
-        for (let i = 0; i < 16; i++) {
-            result[i] /= det;
-        }
-
-        return result;
-    },
-
-    determinant: function (a) {
-        let result = 0;
 
         for (let i = 0; i < 4; i++) {
-            result += a[i] * this.cofactor(a, 0, i);
-        }
+            let max = Math.abs(result[i * 4 + i]);
+            let maxRow = i;
+            for (let j = i + 1; j < 4; j++) {
+                if (Math.abs(result[j * 4 + i]) > max) {
+                    max = Math.abs(result[j * 4 + i]);
+                    maxRow = j;
+                }
+            }
 
-        return result;
-    },
+            if (maxRow != i) {
+                for (let j = 0; j < 4; j++) {
+                    let temp1 = result[i * 4 + j];
+                    result[i * 4 + j] = result[maxRow * 4 + j];
+                    result[maxRow * 4 + j] = temp1;
 
-    cofactor: function (a, row, col) {
-        return Math.pow(-1, row + col) * this.minor(a, row, col);
-    },
+                    temp1 = temp[i * 4 + j];
+                    temp[i * 4 + j] = temp[maxRow * 4 + j];
+                    temp[maxRow * 4 + j] = temp1;
+                }
+            }
 
-    minor: function (a, row, col) {
-        let result = [];
-
-        for (let i = 0; i < 4; i++) {
-            if (i == row) continue;
             for (let j = 0; j < 4; j++) {
-                if (j == col) continue;
-                result.push(a[i * 4 + j]);
+                let temp1 = result[i * 4 + j] / result[i * 4 + i];
+                result[i * 4 + j] = temp1;
+                temp[i * 4 + j] = temp[i * 4 + j] / temp[i * 4 + i];
             }
-        }
 
-        return this.determinant(result);
-    },
-
-    transpose: function (a) {
-        let result = [];
-
-        for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-                result[i * 4 + j] = a[j * 4 + i];
+                if (j != i) {
+                    for (let k = 0; k < 4; k++) {
+                        let temp1 = result[j * 4 + i];
+                        result[j * 4 + k] -= result[i * 4 + k] * temp1;
+                        temp[j * 4 + k] -= temp[i * 4 + k] * temp1;
+                    }
+                }
             }
         }
 
-        return result;
-    }
+        return temp;
+    },
 };
