@@ -1,5 +1,5 @@
-import { Point, HollowObject } from "./config/shape";
-import { generateShaderProgram } from "./config/shader-generator";
+import { Point, HollowObject } from "./config/shape.js";
+import { generateShaderProgram } from "./config/shader-generator.js";
 
 let objectState;
 
