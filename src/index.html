@@ -19,8 +19,8 @@
         >
             <div>
                 <canvas
-                    width="720"
-                    height="720"
+                    width="800"
+                    height="800"
                     id="my-canvas"
                     style="border: 1px solid #000000"
                 ></canvas>
@@ -43,15 +43,15 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shape-type" id="oblique">
+                            <input class="form-check-input" type="radio" name="shape-type" id="pyramid">
                             <label class="form-check-label">
-                                Oblique
+                                Pyramid
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shape-type" id="perspective">
+                            <input class="form-check-input" type="radio" name="shape-type" id="octahedron">
                             <label class="form-check-label">
-                                Perspective
+                                Octahedron
                             </label>
                         </div>
                     </div>
@@ -141,19 +141,25 @@
                 <!-- OTHER SETTINGS -->
                 <div class="p-2">
                     <h4 style="font-weight: 900; font-size:larger;">OTHER SETTINGS</h4>
-                    <div>
-                        Camera Radius: <input type="range" class="form-range" id="scalation-x">
-                    </div>
-                    <div>
-                        Camera Angle: <input type="range" class="form-range" id="scalation-y">
-                    </div>
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="customSwitches">
-                        <label class="custom-control-label" for="customSwitches">Shading</label>
-                    </div>
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="customSwitches">
-                        <label class="custom-control-label" for="customSwitches">Animation</label>
+                    <div class="d-flex flex-row" style="justify-content: space-between">
+                        <div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="shading">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Shading</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="animation">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Animation</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                Camera Radius: <input type="range" class="form-range" id="camera-radius">
+                            </div>
+                            <div>
+                                Camera Angle: <input type="range" class="form-range" id="camera-angle">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
