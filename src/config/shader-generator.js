@@ -1,13 +1,41 @@
 const vertCode3D = `
-    TODO
+    attribute vec3 vPosition;
+    uniform float fudgeFactor;
+
+    uniform mat4 matTransform;
+    uniform mat4 matProjection;
+    varying float color;
+
+    void main(void) {
+        vec4 transformedPos = matTransform * vec4(vPosition.xy, vPosition.z * -1.0, 1.0);
+        vec4 projectedPos   = matProjection * transformedPos;
+        if (fudgeFactor < 0.01) gl_Position = projectedPos;
+        else {
+            float zDivider = 2.0 + projectedPos.z * fudgeFactor;
+            gl_Position = vec4(projectedPos.xy / zDivider, projectedPos.zw);
+        }
+        color = min(max((1.0 - transformedPos.z) / 2.0, 0.0), 1.0);
+    }
 `
 
 const fragCode3D = {
     light: `
-        TODO
+        precision mediump float;
+        uniform vec3 vColor;
+        varying float color;
+
+        void main(void) {
+            gl_FragColor = vec4(vColor * color, 1.0);
+        }
     `,
     flat: `
-        TODO
+        precision mediump float;
+        uniform vec3 vColor;
+        varying float color;
+
+        void main(void) {
+            gl_FragColor = vec4(vColor, 1.0);
+        }
     `
 }
 
