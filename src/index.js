@@ -49,8 +49,51 @@ function generateState() {
     };
 
     glState = {
-        vertices: new Float32Array([]),
-        indices: new Uint16Array([]),
+        vertices: [
+            // Depan
+            -0.5, -0.5, 0.5, // kiri bawah depan 0
+            0.5, -0.5, 0.5, // kanan bawah depan 1
+            0.5, 0.5, 0.5, // kanan atas depan 2
+            -0.5, 0.5, 0.5, // kiri atas depan 3
+            
+            // Belakang
+            -0.5, -0.5, -0.5, // kiri bawah belakang 4
+            0.5, -0.5, -0.5, // kanan bawah belakang 5
+            0.5, 0.5, -0.5, // kanan atas belakang 6
+            -0.5, 0.5, -0.5, // kiri atas belakang 7
+            
+            // Kanan
+            0.5, -0.5, 0.5, // kanan bawah depan 1
+            0.5, -0.5, -0.5, // kanan bawah belakang 5
+            0.5, 0.5, -0.5, // kanan atas belakang 6
+            0.5, 0.5, 0.5, // kanan atas depan 2
+            
+            // Kiri
+            -0.5, -0.5, 0.5, // kiri bawah depan 0
+            -0.5, 0.5, 0.5, // kiri atas depan 3
+            -0.5, 0.5, -0.5, // kiri atas belakang 7
+            -0.5, -0.5, -0.5, // kiri bawah belakang 4
+            
+            // Atas
+            -0.5, 0.5, 0.5, // kiri atas depan 3
+            0.5, 0.5, 0.5, // kanan atas depan 2
+            0.5, 0.5, -0.5, // kanan atas belakang 6
+            -0.5, 0.5, -0.5, // kiri atas belakang 7
+            
+            // Bawah
+            -0.5, -0.5, 0.5, // kiri bawah depan 0
+            -0.5, -0.5, -0.5, // kiri bawah belakang 4
+            0.5, -0.5, -0.5, // kanan bawah belakang 5
+            0.5, -0.5, 0.5 // kanan bawah depan 1
+        ],
+        indices: [
+            0, 1, 1, 2, 2, 3, 3, 0, // Depan
+            4, 5, 5, 6, 6, 7, 7, 4, // Belakang
+            8, 9, 9, 10, 10, 11, 11, 8, // Kanan
+            12, 13, 13, 14, 14, 15, 15, 12, // Kiri
+            16, 17, 17, 18, 18, 19, 19, 16, // Atas
+            20, 21, 21, 22, 22, 23, 23, 20, // Bawah
+        ]
     };
 }
 
@@ -63,9 +106,9 @@ function hexToRgb(hex) {
 
 function calculateTransformMatrix() {
     const translationMatrix = mat4.translationMatrix(
-        state.transformation.translation.x, 
-        state.transformation.translation.y, 
-        state.transformation.translation.z
+        state.transformation.translation.x / 100, 
+        state.transformation.translation.y / 100, 
+        state.transformation.translation.z / 100
     );
 
     const rotationMatrix = mat4.rotationMatrix(
@@ -92,30 +135,43 @@ function calculateProjectionMatrix() {
 }
 
 function render() {
-    const transformationValue = calculateTransformMatrix();
-    const projectionValue = calculateProjectionMatrix();
+    const transformationMatrix = calculateTransformMatrix();
+    const projectionMatrix = calculateProjectionMatrix();
 
     let program = state.shading === shadingType.LIGHT ? lightProgram : flatProgram;
     let positionLoc = gl.getAttribLocation(program, "vPosition");
     let colorLoc = gl.getUniformLocation(program, "vColor");
-    let transformLoc = gl.getUniformLocation(program, "matTransform");
-    let projectionLoc = gl.getUniformLocation(program, "matProjection");
+    let transformLoc = gl.getUniformLocation(program, "mTransform");
+    let projectionLoc = gl.getUniformLocation(program, "mProjection");
     let fudgeFactorLoc = gl.getUniformLocation(program, "fudgeFactor");
 
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
     gl.useProgram(program);
+
+    vertexBuffer = gl.createBuffer();
+    indexBuffer = gl.createBuffer();
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
 
-    gl.uniform3fv(colorLoc, hexToRgb(state.color));
-    gl.uniformMatrix4fv(transformLoc, false, transformationValue);
-    gl.uniformMatrix4fv(projectionLoc, false, projectionValue);
+    const rgbColor = hexToRgb(state.color);
+    gl.uniform3f(colorLoc, rgbColor[0], rgbColor[1], rgbColor[2]);
     gl.uniform1f(fudgeFactorLoc, state.projection === projectionType.PERSPECTIVE ? 1.25 : 0);
 
-    gl.bufferData(gl.ARRAY_BUFFER, glState.vertices, gl.STATIC_DRAW);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, glState.indices, gl.STATIC_DRAW);
+    gl.uniformMatrix4fv(transformLoc, false, transformationMatrix);
+    gl.uniformMatrix4fv(projectionLoc, false, projectionMatrix);
 
-    gl.drawElements(gl.TRIANGLES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(glState.vertices), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(glState.indices), gl.STATIC_DRAW);
+
+    gl.drawElements(gl.LINES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
 
     requestAnimationFrame(render);
 }
@@ -131,14 +187,6 @@ function main() {
 
     lightProgram = generateShaderProgram(gl, vertCode3D, fragCode3D.light);
     flatProgram = generateShaderProgram(gl, vertCode3D, fragCode3D.flat); 
-
-    gl.useProgram(lightProgram);
-
-    vertexBuffer = gl.createBuffer();
-    indexBuffer = gl.createBuffer();
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
     requestAnimationFrame(render);
 }

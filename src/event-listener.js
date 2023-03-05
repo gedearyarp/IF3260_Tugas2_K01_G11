@@ -70,7 +70,7 @@ function updateUI(state) {
 }  
 
 function colorEventListener(state) {
-    document.getElementById("color-picker").addEventListener("change", (event) => {
+    document.getElementById("color-picker").addEventListener("input", (event) => {
         state.color = event.target.value;
     });
 }
@@ -118,7 +118,7 @@ function translationEventListener(state) {
 }
 
 function rotationEventListener(state) {
-    document.getElementById("rotation-x").addEventListener("change", (event) => {
+    document.getElementById("rotation-x").addEventListener("input", (event) => {
         state.transformation.rotation.x = event.target.value;
     });
 
