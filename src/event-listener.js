@@ -182,6 +182,28 @@ function fileEventListener(state) {
     });
 }
 
+function mouseEventListener(state) {
+    document.getElementById("my-canvas").addEventListener("mousedown", (event) => {
+        state.mouse.isDown = true;
+        state.mouse.x = event.clientX;
+        state.mouse.y = event.clientY;
+    });
+
+    document.getElementById("my-canvas").addEventListener("mouseup", (event) => {
+        state.mouse.isDown = false;
+    });
+
+    document.getElementById("my-canvas").addEventListener("mousemove", (event) => {
+        if (state.mouse.isDown) {
+            state.transformation.translation.x += (event.clientX - state.mouse.x) / 5;
+            state.transformation.translation.y -= (event.clientY - state.mouse.y) / 5;
+
+            state.mouse.x = event.clientX;
+            state.mouse.y = event.clientY;
+        }
+    });
+}
+
 function configureEventListener(state) {
     colorEventListener(state);
     shapeEventListener(state);
@@ -196,6 +218,7 @@ function configureEventListener(state) {
 
     resetEventListener(state);
     fileEventListener(state);
+    mouseEventListener(state);
 }
 
 export { configureEventListener };

@@ -25,6 +25,12 @@ function generateState() {
         shading: defaultState.shading,
         animation: defaultState.animation,
 
+        mouse: {
+            isDown: defaultState.mouse.isDown,
+            x: defaultState.mouse.x,
+            y: defaultState.mouse.y,
+        },
+
         transformation: {
             translation: {
                 x: defaultState.transformation.translation.x,
