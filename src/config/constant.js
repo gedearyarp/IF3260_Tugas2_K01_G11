@@ -21,7 +21,7 @@ const defaultState = {
     color: "#000000",
 
     shading: shadingType.LIGHT,
-    animation: true,
+    animation: false,
 
     transformation: {
         translation: {

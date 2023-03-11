@@ -134,6 +134,12 @@ function calculateProjectionMatrix() {
     return mat4.mult(projectionMatrix, mat4.mult(rotationMatrix, translationMatrix));
 }
 
+function playAnimation() {
+    state.transformation.rotation.x += 1;
+    state.transformation.rotation.y += 1;
+    state.transformation.rotation.z += 1;
+}
+
 function render() {
     const transformationMatrix = calculateTransformMatrix();
     const projectionMatrix = calculateProjectionMatrix();
@@ -172,6 +178,8 @@ function render() {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(glState.indices), gl.STATIC_DRAW);
 
     gl.drawElements(gl.LINES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
+
+    if (state.animation) playAnimation();
 
     requestAnimationFrame(render);
 }
