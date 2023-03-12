@@ -1,5 +1,6 @@
 import { shadingType, projectionType, shapeType, defaultState } from "./config/constant.js";
 import { cube, pyramid, octahedron } from "./config/object.js";
+import { save, load } from "./util/save-load.js";
 
 function setDefaultState(state) {
     state.shape = defaultState.shape;
@@ -176,16 +177,17 @@ function resetEventListener(state) {
     document.getElementById("reset-default").addEventListener("click", (event) => {
         setDefaultState(state);
         updateUI(state);
+        document.getElementById("load-data").value = "";
     });
 }
 
-function fileEventListener(state) {
+function fileEventListener(state, glState) {
     document.getElementById("save-data").addEventListener("click", (event) => {
-        console.log(event.target.value);
+        save(state);
     });
 
-    document.getElementById("load-data").addEventListener("click", (event) => {
-        console.log(event.target.value);
+    document.getElementById("load-data").addEventListener("change", (event) => {
+        load(state, glState, event);
     });
 }
 
@@ -224,7 +226,7 @@ function configureEventListener(state, glState) {
     cameraEventListener(state);
 
     resetEventListener(state);
-    fileEventListener(state);
+    fileEventListener(state, glState);
     mouseEventListener(state);
 }
 
