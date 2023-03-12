@@ -1,6 +1,7 @@
 import { vertCode3D, fragCode3D, generateShaderProgram } from "./util/shader-generator.js";
 import { projectionType, shadingType, shapeType, defaultState } from "./config/constant.js";
-import { configureEventListener } from "./event-listener.js";
+import { cube, pyramid, octahedron } from "./config/object.js";
+import { configureEventListener, updateUI } from "./event-listener.js";
 import { mat4 } from "./util/mat4.js";
 
 let gl, canvas;
@@ -55,51 +56,8 @@ function generateState() {
     };
 
     glState = {
-        vertices: [
-            // Depan
-            -0.5, -0.5, 0.5, // kiri bawah depan 0
-            0.5, -0.5, 0.5, // kanan bawah depan 1
-            0.5, 0.5, 0.5, // kanan atas depan 2
-            -0.5, 0.5, 0.5, // kiri atas depan 3
-            
-            // Belakang
-            -0.5, -0.5, -0.5, // kiri bawah belakang 4
-            0.5, -0.5, -0.5, // kanan bawah belakang 5
-            0.5, 0.5, -0.5, // kanan atas belakang 6
-            -0.5, 0.5, -0.5, // kiri atas belakang 7
-            
-            // Kanan
-            0.5, -0.5, 0.5, // kanan bawah depan 1
-            0.5, -0.5, -0.5, // kanan bawah belakang 5
-            0.5, 0.5, -0.5, // kanan atas belakang 6
-            0.5, 0.5, 0.5, // kanan atas depan 2
-            
-            // Kiri
-            -0.5, -0.5, 0.5, // kiri bawah depan 0
-            -0.5, 0.5, 0.5, // kiri atas depan 3
-            -0.5, 0.5, -0.5, // kiri atas belakang 7
-            -0.5, -0.5, -0.5, // kiri bawah belakang 4
-            
-            // Atas
-            -0.5, 0.5, 0.5, // kiri atas depan 3
-            0.5, 0.5, 0.5, // kanan atas depan 2
-            0.5, 0.5, -0.5, // kanan atas belakang 6
-            -0.5, 0.5, -0.5, // kiri atas belakang 7
-            
-            // Bawah
-            -0.5, -0.5, 0.5, // kiri bawah depan 0
-            -0.5, -0.5, -0.5, // kiri bawah belakang 4
-            0.5, -0.5, -0.5, // kanan bawah belakang 5
-            0.5, -0.5, 0.5 // kanan bawah depan 1
-        ],
-        indices: [
-            0, 1, 1, 2, 2, 3, 3, 0, // Depan
-            4, 5, 5, 6, 6, 7, 7, 4, // Belakang
-            8, 9, 9, 10, 10, 11, 11, 8, // Kanan
-            12, 13, 13, 14, 14, 15, 15, 12, // Kiri
-            16, 17, 17, 18, 18, 19, 19, 16, // Atas
-            20, 21, 21, 22, 22, 23, 23, 20, // Bawah
-        ]
+        vertices: cube.vertices,
+        indices: cube.indices,
     };
 }
 
@@ -142,11 +100,18 @@ function calculateProjectionMatrix() {
 
 function playAnimation() {
     state.transformation.rotation.x += 1;
+    if (state.transformation.rotation.x > 360) state.transformation.rotation.x = 0;
     state.transformation.rotation.y += 1;
+    if (state.transformation.rotation.y > 360) state.transformation.rotation.y = 0;
     state.transformation.rotation.z += 1;
+    if (state.transformation.rotation.z > 360) state.transformation.rotation.z = 0;
+
+    updateUI(state);
 }
 
 function render() {
+    if (state.animation) playAnimation();
+
     const transformationMatrix = calculateTransformMatrix();
     const projectionMatrix = calculateProjectionMatrix();
 
@@ -185,14 +150,12 @@ function render() {
 
     gl.drawElements(gl.LINES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
 
-    if (state.animation) playAnimation();
-
     requestAnimationFrame(render);
 }
 
 function main() {
     generateState();
-    configureEventListener(state);
+    configureEventListener(state, glState);
 
     canvas = document.getElementById("my-canvas");
     gl = canvas.getContext("webgl");

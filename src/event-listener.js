@@ -1,4 +1,5 @@
 import { shadingType, projectionType, shapeType, defaultState } from "./config/constant.js";
+import { cube, pyramid, octahedron } from "./config/object.js";
 
 function setDefaultState(state) {
     state.shape = defaultState.shape;
@@ -75,17 +76,23 @@ function colorEventListener(state) {
     });
 }
 
-function shapeEventListener(state) {
+function shapeEventListener(state, glState) {
     document.getElementById("cube").addEventListener("change", (event) => {
         state.shape = shapeType.CUBE;
+        glState.vertices = cube.vertices;
+        glState.indices = cube.indices;
     });
 
     document.getElementById("pyramid").addEventListener("change", (event) => {
         state.shape = shapeType.PYRAMID;
+        glState.vertices = pyramid.vertices;
+        glState.indices = pyramid.indices;
     });
 
     document.getElementById("octahedron").addEventListener("change", (event) => {
         state.shape = shapeType.OCTAHEDRON;
+        glState.vertices = octahedron.vertices;
+        glState.indices = octahedron.indices;
     });
 }
 
@@ -204,9 +211,9 @@ function mouseEventListener(state) {
     });
 }
 
-function configureEventListener(state) {
+function configureEventListener(state, glState) {
     colorEventListener(state);
-    shapeEventListener(state);
+    shapeEventListener(state, glState);
     projectionEventListener(state);
 
     translationEventListener(state);
@@ -221,4 +228,4 @@ function configureEventListener(state) {
     mouseEventListener(state);
 }
 
-export { configureEventListener };
+export { configureEventListener, updateUI };
