@@ -23,12 +23,6 @@ const defaultState = {
     shading: shadingType.LIGHT,
     animation: false,
 
-    mouse: {
-        isDown: false,
-        x: 0,
-        y: 0,
-    },
-
     transformation: {
         translation: {
             x: 0,
