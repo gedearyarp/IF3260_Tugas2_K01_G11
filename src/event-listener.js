@@ -173,11 +173,15 @@ function utilityEventListener(state) {
     });
 }
 
-function resetEventListener(state) {
+function resetEventListener(state, glState) {
     document.getElementById("reset-default").addEventListener("click", (event) => {
         setDefaultState(state);
         updateUI(state);
+
         document.getElementById("load-data").value = "";
+
+        glState.vertices = cube.vertices;
+        glState.indices = cube.indices;
     });
 }
 
@@ -225,7 +229,7 @@ function configureEventListener(state, glState) {
     utilityEventListener(state);
     cameraEventListener(state);
 
-    resetEventListener(state);
+    resetEventListener(state, glState);
     fileEventListener(state, glState);
     mouseEventListener(state);
 }
