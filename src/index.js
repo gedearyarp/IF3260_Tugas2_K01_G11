@@ -119,7 +119,6 @@ function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
 
     gl.useProgram(program);
 
@@ -135,14 +134,13 @@ function render() {
     const rgbColor = hexToRgb(state.color);
     gl.uniform3f(colorLoc, rgbColor[0], rgbColor[1], rgbColor[2]);
     gl.uniform1f(fudgeFactorLoc, state.projection === projectionType.PERSPECTIVE ? 1.25 : 0);
-
     gl.uniformMatrix4fv(transformLoc, false, transformationMatrix);
     gl.uniformMatrix4fv(projectionLoc, false, projectionMatrix);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(glState.vertices), gl.STATIC_DRAW);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(glState.indices), gl.STATIC_DRAW);
 
-    gl.drawElements(gl.LINES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, glState.indices.length, gl.UNSIGNED_SHORT, 0);
 
     requestAnimationFrame(render);
 }
