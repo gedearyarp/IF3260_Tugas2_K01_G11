@@ -6,7 +6,7 @@ WebGL Hollow Object pada JavaScript banyak digunakan dalam aplikasi web interakt
 ## Bentuk Objek
 - Cube
 - Pyramid
-- Octahedron
+- Diamond
 
 ## Hasil
 ![Tampilan web](./image/sample.png)
