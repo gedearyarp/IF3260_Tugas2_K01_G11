@@ -1,7 +1,7 @@
 const shapeType = {
     CUBE: 'CUBE',
     PYRAMID: 'PYRAMID',
-    OCTAHEDRON: 'OCTAHEDRON',
+    DIAMOND: 'DIAMOND',
 };
 
 const projectionType = {

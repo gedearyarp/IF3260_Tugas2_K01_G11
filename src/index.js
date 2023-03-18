@@ -1,6 +1,6 @@
 import { vertCode3D, fragCode3D, generateShaderProgram } from "./util/shader-generator.js";
 import { projectionType, shadingType, shapeType, defaultState } from "./config/constant.js";
-import { cube, pyramid, octahedron } from "./config/object.js";
+import { cube, pyramid, diamond } from "./config/object.js";
 import { configureEventListener, updateUI } from "./event-listener.js";
 import { mat4 } from "./util/mat4.js";
 

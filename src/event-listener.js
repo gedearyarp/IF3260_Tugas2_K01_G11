@@ -1,5 +1,5 @@
 import { shadingType, projectionType, shapeType, defaultState } from "./config/constant.js";
-import { cube, pyramid, octahedron } from "./config/object.js";
+import { cube, pyramid, diamond } from "./config/object.js";
 import { save, load } from "./util/save-load.js";
 
 function setDefaultState(state) {
@@ -31,7 +31,7 @@ function updateUI(state) {
 
     document.getElementById("cube").checked = state.shape === shapeType.CUBE;
     document.getElementById("pyramid").checked = state.shape === shapeType.PYRAMID;
-    document.getElementById("octahedron").checked = state.shape === shapeType.OCTAHEDRON;
+    document.getElementById("diamond").checked = state.shape === shapeType.DIAMOND;
 
     document.getElementById("orthographic").checked = state.projection === projectionType.ORTHOGRAPHIC;
     document.getElementById("oblique").checked = state.projection === projectionType.OBLIQUE;
@@ -88,12 +88,14 @@ function shapeEventListener(state, glState) {
         state.shape = shapeType.PYRAMID;
         glState.vertices = pyramid.vertices;
         glState.indices = pyramid.indices;
+        console.log(glState);
     });
 
-    document.getElementById("octahedron").addEventListener("change", (event) => {
-        state.shape = shapeType.OCTAHEDRON;
-        glState.vertices = octahedron.vertices;
-        glState.indices = octahedron.indices;
+    document.getElementById("diamond").addEventListener("change", (event) => {
+        state.shape = shapeType.DIAMOND;
+        glState.vertices = diamond.vertices;
+        glState.indices = diamond.indices;
+        console.log(glState);
     });
 }
 

@@ -1,6 +1,6 @@
 import { updateUI } from "../event-listener.js";
 import { shapeType } from "../config/constant.js";
-import { cube, pyramid, octahedron } from "../config/object.js";
+import { cube, pyramid, diamond } from "../config/object.js";
 
 function loadShape(state, glState) {
     switch (state.shape) {
@@ -12,9 +12,9 @@ function loadShape(state, glState) {
             glState.vertices = pyramid.vertices;
             glState.indices = pyramid.indices;
             break;
-        case shapeType.OCTAHEDRON:
-            glState.vertices = octahedron.vertices;
-            glState.indices = octahedron.indices;
+        case shapeType.DIAMOND:
+            glState.vertices = diamond.vertices;
+            glState.indices = diamond.indices;
             break;
     }
 }
