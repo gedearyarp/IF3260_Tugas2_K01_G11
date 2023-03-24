@@ -133,7 +133,7 @@ function render() {
 
     const rgbColor = hexToRgb(state.color);
     gl.uniform3f(colorLoc, rgbColor[0], rgbColor[1], rgbColor[2]);
-    gl.uniform1f(fudgeFactorLoc, state.projection === projectionType.PERSPECTIVE ? 1.25 : 0);
+    gl.uniform1f(fudgeFactorLoc, state.projection === projectionType.PERSPECTIVE ? Math.PI/3 : 0);
     gl.uniformMatrix4fv(transformLoc, false, transformationMatrix);
     gl.uniformMatrix4fv(projectionLoc, false, projectionMatrix);
 
